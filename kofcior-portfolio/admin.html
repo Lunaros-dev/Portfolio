@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admina - Dark Fantasy Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+    
+    <style>
+        /* Additional admin-specific styles */
+        .admin {
+            min-height: 100vh;
+            padding: var(--space-2xl) 0;
+            background: var(--bg);
+        }
+        
+        .admin__header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .admin__title {
+            color: var(--accent);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .admin__subtitle {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .admin__section {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .admin__section-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-lg);
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: var(--space-sm);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        
+        .image-preview {
+            margin-top: var(--space-sm);
+            max-width: 300px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+        
+        .image-preview.active {
+            display: block;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .json-output {
+            background: #000;
+            border: 1px solid var(--border);
+            padding: var(--space-md);
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #0f0;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-top: var(--space-md);
+        }
+        
+        .alert {
+            padding: var(--space-md);
+            border: 1px solid;
+            margin-bottom: var(--space-md);
+            border-radius: 0;
+        }
+        
+        .alert--success {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: #0f0;
+            color: #0f0;
+        }
+        
+        .alert--error {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: var(--accent-2);
+            color: var(--accent-2);
+        }
+        
+        .alert--info {
+            background: rgba(111, 43, 95, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin">
+        <div class="container">
+            <!-- Header -->
+            <div class="admin__header">
+                <h1 class="admin__title">Panel Administracyjny</h1>
+                <p class="admin__subtitle">Zarządzanie Portfolio Dark Fantasy</p>
+                <a href="./index.html" class="btn btn--secondary" style="margin-top: 1rem;">
+                    <span>← Powrót do Galerii</span>
+                </a>
+            </div>
+            
+            <!-- Security Notice -->
+            <div class="alert alert--info" id="securityNotice">
+                <strong>ℹ️ Informacja:</strong> Ten panel działa lokalnie i nie wymaga uwierzytelnienia. 
+                W środowisku produkcyjnym zalecane jest dodanie zabezpieczeń (np. parametr ?key= w URL).
+            </div>
+            
+            <!-- Add Artwork Section -->
+            <div class="admin__section">
+                <h2 class="admin__section-title">Dodaj Nowe Dzieło</h2>
+                
+                <form id="artworkForm">
+                    <div class="form-group">
+                        <label for="artTitle">Tytuł *</label>
+                        <input type="text" id="artTitle" required class="input" placeholder="np. Straż Nocna">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="artYear">Rok *</label>
+                            <input type="text" id="artYear" required class="input" placeholder="2024">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artTechnique">Technika *</label>
+                            <input type="text" id="artTechnique" required class="input" placeholder="Digital Painting">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="artDescription">Opis *</label>
+                        <textarea id="artDescription" required class="textarea" rows="5" 
+                                  placeholder="Szczegółowy opis dzieła..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="artTags">Tagi (oddzielone przecinkami) *</label>
+                            <input type="text" id="artTags" required class="input" placeholder="fantasy, dark, warrior">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artDimensions">Wymiary</label>
+                            <input type="text" id="artDimensions" class="input" placeholder="3000 x 4000 px">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="artImage">Obraz (wybierz plik lub wklej URL) *</label>
+                        <input type="file" id="artImageFile" accept="image/*" class="input" style="margin-bottom: 0.5rem;">
+                        <input type="text" id="artImageUrl" class="input" placeholder="lub wklej URL obrazu">
+                        <div class="image-preview" id="imagePreview">
+                            <img id="previewImg" src="" alt="Podgląd">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="artAlt">Tekst alternatywny (Alt) *</label>
+                        <input type="text" id="artAlt" required class="input" 
+                               placeholder="Opis obrazu dla czytników ekranu">
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary">
+                        <span>Generuj JSON</span>
+                    </button>
+                </form>
+            </div>
+            
+            <!-- JSON Output Section -->
+            <div class="admin__section" id="outputSection" style="display: none;">
+                <h2 class="admin__section-title">Wygenerowany JSON</h2>
+                
+                <div class="alert alert--success">
+                    <strong>✓ Sukces!</strong> JSON został wygenerowany. Skopiuj poniższy kod lub pobierz plik.
+                </div>
+                
+                <div class="json-output" id="jsonOutput"></div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn--primary" id="copyJsonBtn">
+                        <span>Kopiuj do Schowka</span>
+                    </button>
+                    <button type="button" class="btn btn--primary" id="downloadJsonBtn">
+                        <span>Pobierz data.json</span>
+                    </button>
+                    <button type="button" class="btn btn--secondary" id="resetFormBtn">
+                        <span>Dodaj Kolejne Dzieło</span>
+                    </button>
+                </div>
+                
+                <div class="alert alert--info" style="margin-top: 2rem;">
+                    <strong>📋 Instrukcje:</strong><br>
+                    1. Skopiuj wygenerowany JSON lub pobierz plik<br>
+                    2. Zastąp zawartość pliku <code>assets/data.json</code><br>
+                    3. Upewnij się, że obraz jest dostępny pod podaną ścieżką<br>
+                    4. Odśwież stronę galerii, aby zobaczyć zmiany<br>
+                    <br>
+                    <strong>💡 Wskazówka:</strong> Możesz edytować plik data.json ręcznie, dodając wiele dzieł naraz.
+                </div>
+            </div>
+            
+            <!-- Data Management Section -->
+            <div class="admin__section">
+                <h2 class="admin__section-title">Zarządzanie Danymi</h2>
+                
+                <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">Export/Import Komentarzy i Recenzji</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Eksportuj lub importuj dane z localStorage (komentarze i recenzje).
+                </p>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn--primary" id="exportDataBtn">
+                        <span>Eksportuj Dane</span>
+                    </button>
+                    <label class="btn btn--secondary" style="cursor: pointer; margin: 0;">
+                        <span>Importuj Dane</span>
+                        <input type="file" id="importDataFile" accept=".json" style="display: none;">
+                    </label>
+                </div>
+                
+                <div class="alert alert--info" style="margin-top: 1.5rem;">
+                    <strong>ℹ️ Uwaga:</strong> Funkcje Export/Import działają z danymi przechowywanymi lokalnie w przeglądarce. 
+                    Do pełnej synchronizacji danych na różnych urządzeniach potrzebny będzie backend.
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="admin__section">
+                <h2 class="admin__section-title">Instrukcje</h2>
+                
+                <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">Jak dodać nowe dzieło?</h3>
+                <ol style="color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem;">
+                    <li>Wypełnij formularz powyżej wszystkimi wymaganymi polami (*)</li>
+                    <li>Wybierz obraz z dysku lub wklej URL (zalecane: własne zdjęcia w folderze <code>assets/images/</code>)</li>
+                    <li>Kliknij "Generuj JSON"</li>
+                    <li>Skopiuj wygenerowany JSON lub pobierz plik</li>
+                    <li>Zastąp zawartość <code>assets/data.json</code> (dodaj nowe dzieło do tablicy "artworks")</li>
+                    <li>Odśwież galerię</li>
+                </ol>
+                
+                <h3 style="margin: 2rem 0 1rem; font-size: 1.2rem;">Jak podłączyć backend?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Aktualnie portfolio działa w trybie frontend-only z localStorage. 
+                    Aby podłączyć backend:
+                </p>
+                <ol style="color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem;">
+                    <li>Utwórz API endpoint do zapisywania dzieł (np. POST /api/artworks)</li>
+                    <li>Utwórz endpoint do pobierania dzieł (GET /api/artworks)</li>
+                    <li>Dodaj endpointy dla komentarzy (POST/GET /api/artworks/:id/comments)</li>
+                    <li>Dodaj endpointy dla recenzji (POST/GET /api/reviews)</li>
+                    <li>Zmodyfikuj <code>assets/js/app.js</code> aby używał fetch() do komunikacji z API</li>
+                    <li>Dodaj uwierzytelnienie do panelu admina (np. JWT tokens)</li>
+                </ol>
+                
+                <p style="color: var(--muted); margin-top: 1.5rem; font-size: 0.9rem;">
+                    Szczegółowe informacje znajdziesz w pliku README.md
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Admin Panel JavaScript
+        
+        let currentArtworks = [];
+        let generatedImageData = null;
+        
+        // Load existing data.json to append to it
+        async function loadExistingData() {
+            try {
+                const response = await fetch('./assets/data.json');
+                const data = await response.json();
+                currentArtworks = data.artworks || [];
+            } catch (error) {
+                console.log('No existing data.json or error loading:', error);
+                currentArtworks = [];
+            }
+        }
+        
+        // Image preview
+        document.getElementById('artImageFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                generatedImageData = event.target.result;
+                showImagePreview(generatedImageData);
+                document.getElementById('artImageUrl').value = ''; // Clear URL input
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        document.getElementById('artImageUrl').addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                generatedImageData = url;
+                showImagePreview(url);
+                document.getElementById('artImageFile').value = ''; // Clear file input
+            }
+        });
+        
+        function showImagePreview(src) {
+            const preview = document.getElementById('imagePreview');
+            const img = document.getElementById('previewImg');
+            img.src = src;
+            preview.classList.add('active');
+        }
+        
+        // Generate slug from title
+        function generateSlug(title) {
+            return title
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+        
+        // Generate unique ID
+        function generateId() {
+            return 'artwork-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+        
+        // Form submission
+        document.getElementById('artworkForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Gather form data
+            const title = document.getElementById('artTitle').value.trim();
+            const year = document.getElementById('artYear').value.trim();
+            const technique = document.getElementById('artTechnique').value.trim();
+            const description = document.getElementById('artDescription').value.trim();
+            const tags = document.getElementById('artTags').value.trim().split(',').map(t => t.trim());
+            const dimensions = document.getElementById('artDimensions').value.trim() || 'N/A';
+            const alt = document.getElementById('artAlt').value.trim();
+            
+            if (!generatedImageData) {
+                alert('Wybierz obraz lub podaj URL!');
+                return;
+            }
+            
+            // Create artwork object
+            const newArtwork = {
+                id: generateId(),
+                title: title,
+                slug: generateSlug(title),
+                year: year,
+                technique: technique,
+                tags: tags,
+                description: description,
+                image: generatedImageData, // This will be either base64 or URL
+                dimensions: dimensions,
+                alt: alt
+            };
+            
+            // Load existing artworks and append new one
+            await loadExistingData();
+            currentArtworks.push(newArtwork);
+            
+            // Generate complete data.json structure
+            const outputData = {
+                artworks: currentArtworks
+            };
+            
+            // Display JSON
+            const jsonString = JSON.stringify(outputData, null, 2);
+            document.getElementById('jsonOutput').textContent = jsonString;
+            document.getElementById('outputSection').style.display = 'block';
+            
+            // Scroll to output
+            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Copy to clipboard
+        document.getElementById('copyJsonBtn').addEventListener('click', () => {
+            const jsonText = document.getElementById('jsonOutput').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                alert('JSON skopiowany do schowka!');
+            }).catch(err => {
+                console.error('Error copying to clipboard:', err);
+                alert('Błąd kopiowania. Zaznacz i skopiuj ręcznie.');
+            });
+        });
+        
+        // Download JSON
+        document.getElementById('downloadJsonBtn').addEventListener('click', () => {
+            const jsonText = document.getElementById('jsonOutput').textContent;
+            const blob = new Blob([jsonText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+        
+        // Reset form
+        document.getElementById('resetFormBtn').addEventListener('click', () => {
+            document.getElementById('artworkForm').reset();
+            document.getElementById('imagePreview').classList.remove('active');
+            document.getElementById('outputSection').style.display = 'none';
+            generatedImageData = null;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Export data
+        document.getElementById('exportDataBtn').addEventListener('click', () => {
+            if (typeof window.portfolioExport === 'function') {
+                window.portfolioExport();
+            } else {
+                alert('Funkcja exportu nie jest dostępna. Upewnij się, że app.js jest załadowany.');
+            }
+        });
+        
+        // Import data
+        document.getElementById('importDataFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (typeof window.portfolioImport === 'function') {
+                window.portfolioImport(file);
+            } else {
+                alert('Funkcja importu nie jest dostępna. Upewnij się, że app.js jest załadowany.');
+            }
+        });
+        
+        // Check for secret key in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const key = urlParams.get('key');
+        
+        if (key === 'dark-fantasy-2025') {
+            document.getElementById('securityNotice').innerHTML = `
+                <strong>✓ Autoryzacja:</strong> Panel odblokowany z kluczem bezpieczeństwa.
+            `;
+            document.getElementById('securityNotice').classList.remove('alert--info');
+            document.getElementById('securityNotice').classList.add('alert--success');
+        }
+        
+        // Load existing data on page load
+        loadExistingData();
+    </script>
+</body>
+</html>

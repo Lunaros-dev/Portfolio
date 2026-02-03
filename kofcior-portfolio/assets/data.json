@@ -1,0 +1,76 @@
+{
+  "artworks": [
+    {
+      "id": "artwork-001",
+      "title": "Straż Nocna",
+      "slug": "straz-nocna",
+      "year": "2024",
+      "technique": "Digital Painting",
+      "tags": ["fantasy", "dark", "warrior"],
+      "description": "Samotny strażnik stoi na murach miasta, obserwując mroczne lasy otaczające fortecę. Księżyc w pełni rzuca długie cienie, a mgła snuje się między drzewami. To dzieło oddaje klimat oczekiwania na nieuchronne starcie z siłami ciemności.",
+      "image": "./assets/images/placeholder-1.jpg",
+      "dimensions": "3000 x 4000 px",
+      "alt": "Mroczny strażnik na murach fortecy w blasku księżyca"
+    },
+    {
+      "id": "artwork-002",
+      "title": "Królestwo Cieni",
+      "slug": "krolestwo-cieni",
+      "year": "2024",
+      "technique": "Mixed Media",
+      "tags": ["fantasy", "landscape", "dark"],
+      "description": "Porzucone królestwo leży w ruinie, przejęte przez siły ciemności. Zniszczone wieże i zamki stanowią ponure memento dawnej świetności. Purpurowe niebo i czerwona łuna na horyzoncie zwiastują nadchodzące nieszczęście.",
+      "image": "./assets/images/placeholder-2.jpg",
+      "dimensions": "4500 x 3000 px",
+      "alt": "Ruiny mrocznego królestwa w purpurowym świetle"
+    },
+    {
+      "id": "artwork-003",
+      "title": "Nekromanta",
+      "slug": "nekromanta",
+      "year": "2023",
+      "technique": "Digital Art",
+      "tags": ["character", "dark", "magic"],
+      "description": "Potężna nekromantka przywołuje duchy z zaświatów. Jej oczy płoną nieprzyjaznym światłem, a dłonie trzymają kryształową czaszkę pulsującą mroczną energią. Wokół niej unoszą się widma przeszłości.",
+      "image": "./assets/images/placeholder-3.jpg",
+      "dimensions": "2400 x 3600 px",
+      "alt": "Nekromantka w ciemnej szacie przywołująca duchy"
+    },
+    {
+      "id": "artwork-004",
+      "title": "Smocze Ognisko",
+      "slug": "smocze-ognisko",
+      "year": "2023",
+      "technique": "Digital Painting",
+      "tags": ["fantasy", "dragon", "fire"],
+      "description": "Starożytny smok wyłania się z płomieni, jego łuski odbijają pomarańczowo-czerwone światło ognia. Dymy wznoszą się ku czarnemu niebu, a żar sprawia, że powietrze wokół drży od gorąca.",
+      "image": "./assets/images/placeholder-4.jpg",
+      "dimensions": "5000 x 2800 px",
+      "alt": "Potężny smok wyłaniający się z płomieni"
+    },
+    {
+      "id": "artwork-005",
+      "title": "Elficka Księżniczka",
+      "slug": "elficka-ksiezniczka",
+      "year": "2024",
+      "technique": "Digital Portrait",
+      "tags": ["character", "fantasy", "portrait"],
+      "description": "Portret elfickiej księżniczki o bladej cerze i fioletowych oczach. Jej srebrzystowłose loki ozdabiają klejnoty, a na czole spoczywa delikatna korona z ciemnego metalu. W jej spojrzeniu kryje się mądrość wieków.",
+      "image": "./assets/images/placeholder-5.jpg",
+      "dimensions": "2000 x 3000 px",
+      "alt": "Portret elfickiej księżniczki z fioletowymi oczami"
+    },
+    {
+      "id": "artwork-006",
+      "title": "Przeklęty Las",
+      "slug": "przeklety-las",
+      "year": "2023",
+      "technique": "Concept Art",
+      "tags": ["landscape", "dark", "forest"],
+      "description": "Głęboko w przeklętym lesie rosną pokręcone drzewa o czarnej korze. Między korzeniami tlą się tajemnicze światełka, a mgła spowijająca poszycie lasu tworzy niesamowite kształty. To miejsce, gdzie czas płynie inaczej.",
+      "image": "./assets/images/placeholder-6.jpg",
+      "dimensions": "4000 x 2250 px",
+      "alt": "Mroczny las z pokręconymi drzewami i tajemniczą mgłą"
+    }
+  ]
+}
